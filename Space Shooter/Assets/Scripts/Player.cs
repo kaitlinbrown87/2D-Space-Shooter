@@ -3,11 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : MonoBehaviour
-{ 
+{
     [SerializeField]
     private float _speed = 3.5f;
     public float horizontalinput;
     public float verticalinput;
+    public float BottomLimit = -3.8f;
+    public float RightLimit = 11.3f;
+    public float LeftLimit = -11.3f;
+    [SerializeField]
+    public GameObject _LaserPrefab;
+    [SerializeField]
+    private float _fireRate = 0.5f;
+    private float _canFire = -1f;
 
 
     void Start()
@@ -16,25 +24,51 @@ public class Player : MonoBehaviour
         transform.position = new Vector3(0, 0, 0);
     }
 
-    //   Update is called once per frame
     void Update()
+    {
+        CalculateMovement();
+
+        
+    }
+    void CalculateMovement()
     {
         float horizontalinput = Input.GetAxis("Horizontal");
         float verticalinput = Input.GetAxis("Vertical");
 
-        //     new vector3(-1,0,0)0*5*3.5*real time
-        //  transform.Translate(Vector3.right*horizontalinput *_speed*Time.deltaTime);
-        //  transform.Translate(Vector3.up * verticalinput * _speed * Time.deltaTime);
+
         Vector3 direction = new Vector3(horizontalinput, verticalinput, 0);
         transform.Translate(direction * _speed * Time.deltaTime);
 
-        // if player position on the Y is greater than 0
-        // Y position = 0
-
-        if (transform.position.y >= 0);
+        if (Input.GetKeyDown(KeyCode.Space)&& Time.time >_canFire)
         {
+            FireLaser();
+        }
 
-            transform.position = new Vector3(transform.position.x, 0, 0);
+
+        if (transform.position.y >= 0)
+        {
+            transform.position = new Vector3(transform.position.x, 0f, 0f);
+        }
+        else if (transform.position.y <= BottomLimit)
+        {
+            transform.position = new Vector3(transform.position.x, BottomLimit, 0f);
+        }
+
+        if (transform.position.x > RightLimit)
+        {
+            transform.position = new Vector3(LeftLimit, transform.position.y, 0f);
+        }
+        else if (transform.position.x < LeftLimit)
+        {
+            transform.position = new Vector3(RightLimit, transform.position.y, 0f);
         }
     }
-} 
+    void FireLaser()
+    {
+        {
+            _canFire = Time.time + _fireRate;
+            Instantiate(_LaserPrefab, transform.position + new Vector3(0, 0.8f, 0), Quaternion.identity);
+        }
+    }
+
+}
