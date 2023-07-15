@@ -21,19 +21,26 @@ public class Player : MonoBehaviour
     private SpawnManager _spawnManager;
 
 
+
     void Start()
     {
+        // take current position = new position (0,0,0)
         transform.position = new Vector3(0, 0, 0);
         _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
-        if (_spawnManager == null)
+        if (_spawnManager ==null)
         {
-            Debug.LogError("Spawn Manager is Null");
+            Debug.LogError("Spawn manager is NULL.");
         }
+        //Find the object. Get the component
     }
 
     void Update()
     {
-        CalculateMovement();        
+        CalculateMovement();
+        if (Input.GetKeyDown(KeyCode.Space) && Time.time > _canFire)
+        {
+            FireLaser();
+        }
     }
 
     void CalculateMovement()
@@ -45,10 +52,7 @@ public class Player : MonoBehaviour
         Vector3 direction = new Vector3(horizontalinput, verticalinput, 0);
         transform.Translate(direction * _speed * Time.deltaTime);
 
-        if (Input.GetKeyDown(KeyCode.Space)&& Time.time >_canFire)
-        {
-            FireLaser();
-        }
+       
 
 
         if (transform.position.y >= 0)
@@ -72,10 +76,10 @@ public class Player : MonoBehaviour
 
     void FireLaser()
     {
-        {
+     
             _canFire = Time.time + _fireRate;
-            Instantiate(_LaserPrefab, transform.position + new Vector3(0, 0.8f, 0), Quaternion.identity);
-        }
+            Instantiate(_LaserPrefab, transform.position + new Vector3(0, 1.05f, 0), Quaternion.identity);
+     
     }
     public void Damage()
     {
@@ -83,7 +87,7 @@ public class Player : MonoBehaviour
        
         if (_lives < 1)
         {
-            _spawnManager.OnPlayerDeath();
+            _spawnManager._OnPlayerDeath();
             Destroy(this.gameObject);
         }
     }
