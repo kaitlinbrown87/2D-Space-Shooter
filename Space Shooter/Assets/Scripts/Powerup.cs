@@ -30,20 +30,25 @@ public class Powerup : MonoBehaviour
     {
         if (other.tag == "Player")
         {
-            // communicate with Player script
-            // handle to the component I want
-            // assigin handle to the component
             Player player = other.transform.GetComponent<Player>();
-            if (player != null )
+            if (player != null)
             {
                 player.trippleShotActive();
             }
             Destroy(this.gameObject);
+
+           
+           
         }
-    }
 
 
-    // OnTriggerCollision 
-    // Only be collectable by Player (HINT: Use tags)
-    // on collected destroy 
+        
+
+    } 
+
+
+
+   
 }
+
+ 

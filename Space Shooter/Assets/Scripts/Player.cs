@@ -12,7 +12,7 @@ public class Player : MonoBehaviour
     public float RightLimit = 11.3f;
     public float LeftLimit = -11.3f;
     [SerializeField]
-    public GameObject _LaserPrefab;
+    private GameObject _LaserPrefab;
     [SerializeField]
     private GameObject _tripleShotPrefab;
     [SerializeField]
@@ -22,7 +22,7 @@ public class Player : MonoBehaviour
     private int _lives = 3;
     private SpawnManager _spawnManager;
     [SerializeField]
-    private bool _isTriggerShotActive = false;
+    private bool _isTripleShotActive = false;
 
     
 
@@ -82,14 +82,13 @@ public class Player : MonoBehaviour
     {
      
             _canFire = Time.time + _fireRate;
-        if (_isTriggerShotActive == true)
+        if (_isTripleShotActive == true)
         {
             Instantiate(_tripleShotPrefab, transform.position, Quaternion.identity);
         }
         else
         {
-            Instantiate(_LaserPrefab, transform.position + new Vector3(0, 1.05f, 0), Quaternion.identity);
-            
+            GameObject newLaser = Instantiate(_LaserPrefab, transform.position + new Vector3(0, 1.05f, 0), Quaternion.identity);
         }
 
         
@@ -111,13 +110,19 @@ public class Player : MonoBehaviour
     }
     public void trippleShotActive()
     {
-        _isTriggerShotActive = true;
+        // Is tripleShotActive becomes true
+        // Start power down coroutine for triple shot
+        // IEnumerator 
+        // Wait 5 seconds set the 
+            
+            
+            _isTripleShotActive = true;
         StartCoroutine (TripleShotPowerDownRoutine());
     } 
     IEnumerator TripleShotPowerDownRoutine()
     {
         yield return new WaitForSeconds(5.0f);
-        _isTriggerShotActive = false;
+        _isTripleShotActive = false;
     }
 }
     
