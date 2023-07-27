@@ -16,15 +16,12 @@ public class Powerup : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // move down at a speed of 3 (adjust in inspector)
-        // when we leave this screen, destroy objecct 
+        
         transform.Translate(Vector3.down * _speed * Time.deltaTime);
         if (transform.position.y < -4.5f)
         {
             Destroy(this.gameObject);
         }
-
-
     }
     private void OnTriggerEnter2D(Collider2D other)
     {
@@ -35,15 +32,8 @@ public class Powerup : MonoBehaviour
             {
                 player.trippleShotActive();
             }
-            Destroy(this.gameObject);
-
-           
-           
+            Destroy(this.gameObject);  
         }
-
-
-        
-
     } 
 
 
