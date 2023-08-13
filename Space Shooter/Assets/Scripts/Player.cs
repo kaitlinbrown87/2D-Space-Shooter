@@ -6,6 +6,7 @@ public class Player : MonoBehaviour
 {
     [SerializeField]
     private float _speed = 3.5f;
+    private float _speedMultiplier = 2;
     public float horizontalinput;
     public float verticalinput;
     public float BottomLimit = -3.8f;
@@ -23,15 +24,16 @@ public class Player : MonoBehaviour
     private SpawnManager _spawnManager;
     [SerializeField]
     private bool _isTripleShotActive = false;
-
-    
-
+    private bool _isSpeedBoostActive = false;
+    private bool _isShieldActive = false;
+    [SerializeField]
+    private GameObject _shieldVisualizer;
     void Start()
     {
         // take current position = new position (0,0,0)
         transform.position = new Vector3(0, 0, 0);
         _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
-        if (_spawnManager ==null)
+        if (_spawnManager == null)
         {
             Debug.LogError("Spawn manager is NULL.");
         }
@@ -56,8 +58,6 @@ public class Player : MonoBehaviour
         Vector3 direction = new Vector3(horizontalinput, verticalinput, 0);
         transform.Translate(direction * _speed * Time.deltaTime);
 
-       
-
 
         if (transform.position.y >= 0)
         {
@@ -80,8 +80,8 @@ public class Player : MonoBehaviour
 
     void FireLaser()
     {
-     
-            _canFire = Time.time + _fireRate;
+
+        _canFire = Time.time + _fireRate;
         if (_isTripleShotActive == true)
         {
             Instantiate(_tripleShotPrefab, transform.position, Quaternion.identity);
@@ -91,7 +91,7 @@ public class Player : MonoBehaviour
             GameObject newLaser = Instantiate(_LaserPrefab, transform.position + new Vector3(0, 1.05f, 0), Quaternion.identity);
         }
 
-        
+
 
 
         // instantiate 3 lasers (triple shot prefab)
@@ -99,8 +99,17 @@ public class Player : MonoBehaviour
     }
     public void Damage()
     {
+
+        if (_isShieldActive == true)
+        {
+            _isShieldActive = false;
+            _shieldVisualizer.gameObject.SetActive(false);
+            return;
+            
+        }
+        
         _lives -= 1;
-       
+
         if (_lives < 1)
         {
             _spawnManager._OnPlayerDeath();
@@ -110,19 +119,34 @@ public class Player : MonoBehaviour
     }
     public void trippleShotActive()
     {
-        // Is tripleShotActive becomes true
-        // Start power down coroutine for triple shot
-        // IEnumerator 
-        // Wait 5 seconds set the 
-            
-            
-            _isTripleShotActive = true;
-        StartCoroutine (TripleShotPowerDownRoutine());
-    } 
+        _isTripleShotActive = true;
+        StartCoroutine(TripleShotPowerDownRoutine());
+    }
     IEnumerator TripleShotPowerDownRoutine()
     {
         yield return new WaitForSeconds(5.0f);
         _isTripleShotActive = false;
     }
+    
+    public void SpeedBoostActive ()
+    {
+        _isSpeedBoostActive = true;
+        _speed *= _speedMultiplier;
+        StartCoroutine(SpeedBoostPowerDownRoutine());
+    }
+    IEnumerator SpeedBoostPowerDownRoutine ()
+    {
+        yield return new WaitForSeconds(5.0f);
+        _isSpeedBoostActive = false;
+        _speed /= _speedMultiplier;
+    }
+    public void ShieldActive ()
+    {
+        _isShieldActive = true;
+        _shieldVisualizer.gameObject.SetActive(true);
+        Debug.Log("activating shields");
+
+    }
 }
+    
     
