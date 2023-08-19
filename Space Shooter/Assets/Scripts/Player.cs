@@ -28,6 +28,8 @@ public class Player : MonoBehaviour
     private bool _isShieldActive = false;
     [SerializeField]
     private GameObject _shieldVisualizer;
+    [SerializeField]
+    private int _score;
     void Start()
     {
         // take current position = new position (0,0,0)
@@ -147,6 +149,8 @@ public class Player : MonoBehaviour
         Debug.Log("activating shields");
 
     }
+    // Method to add 10 to the score
+    // communicate with the UI to update score
 }
     
     
