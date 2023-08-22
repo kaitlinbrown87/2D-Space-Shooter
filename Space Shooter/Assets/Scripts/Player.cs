@@ -30,16 +30,22 @@ public class Player : MonoBehaviour
     private GameObject _shieldVisualizer;
     [SerializeField]
     private int _score;
+    private UIManager _uIManager;
     void Start()
     {
         // take current position = new position (0,0,0)
         transform.position = new Vector3(0, 0, 0);
         _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
+        _uIManager = GameObject.Find("Canvas").GetComponent<UIManager>();
         if (_spawnManager == null)
         {
             Debug.LogError("Spawn manager is NULL.");
         }
-        //Find the object. Get the component
+
+        if (_uIManager == null )
+        {
+            Debug.LogError("UI manager is null");
+        }
     }
 
     void Update()
@@ -107,9 +113,9 @@ public class Player : MonoBehaviour
             _isShieldActive = false;
             _shieldVisualizer.gameObject.SetActive(false);
             return;
-            
+
         }
-        
+
         _lives -= 1;
 
         if (_lives < 1)
@@ -129,28 +135,35 @@ public class Player : MonoBehaviour
         yield return new WaitForSeconds(5.0f);
         _isTripleShotActive = false;
     }
-    
-    public void SpeedBoostActive ()
+
+    public void SpeedBoostActive()
     {
         _isSpeedBoostActive = true;
         _speed *= _speedMultiplier;
         StartCoroutine(SpeedBoostPowerDownRoutine());
     }
-    IEnumerator SpeedBoostPowerDownRoutine ()
+    IEnumerator SpeedBoostPowerDownRoutine()
     {
         yield return new WaitForSeconds(5.0f);
         _isSpeedBoostActive = false;
         _speed /= _speedMultiplier;
     }
-    public void ShieldActive ()
+    public void ShieldActive()
     {
         _isShieldActive = true;
         _shieldVisualizer.gameObject.SetActive(true);
         Debug.Log("activating shields");
-
     }
+    public void AddScore(int amount)
+    {
+        _score += amount;
+        _uIManager.UpdateScore(_score);
+    }
+    
+
     // Method to add 10 to the score
     // communicate with the UI to update score
 }
-    
+
+
     

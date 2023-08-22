@@ -7,8 +7,17 @@ public class Enemy : MonoBehaviour
     [SerializeField]
     private float _speed = 4.0f;
 
+    [SerializeField]
+    private int _enemyScore = 10;
+
     // Update is called once per frame
-    void Update()
+    void Start()
+    {
+        
+    }
+
+
+      void Update()
     {
         // move down 4 meters per second
         transform.Translate(Vector3.down * _speed * Time.deltaTime);
@@ -24,23 +33,25 @@ public class Enemy : MonoBehaviour
     }
     private void OnTriggerEnter2D (Collider2D other)
     {
-   
-        if (other.tag == "Player")
+        Player player = GameObject.Find("Player").GetComponent<Player>();
+        if (player == null)
         {
-            Player player = other.transform.GetComponent<Player>();
+            Debug.LogError("player script not found");
+            return;
+        }
 
-            if (player!= null )
-            {
-                player.Damage();
-            }
-           
+        if (other.tag == "Player")
+        {           
+            player.Damage();           
             Destroy(this.gameObject);
         }
         
         if (other.tag == "Laser")
-        {
+        {            
             Destroy(other.gameObject);
-            // add 10 to score
+
+            player.AddScore(_enemyScore);
+
             Destroy(this.gameObject);
         }
 
