@@ -114,3 +114,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 234b83de33766fb429247d7cbbd74d05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _rotateSpeed: 19
+  _explodePrefab: {fileID: 2983233890655759438, guid: 4cc8ec03f54651d4f965ff3eabda09e8, type: 3}

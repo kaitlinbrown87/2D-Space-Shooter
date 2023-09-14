@@ -13,11 +13,12 @@ public class Enemy : MonoBehaviour
     private Player _player;
 
     private Animator _anim;
-
+    private AudioSource _audioSource;
     // Update is called once per frame
     void Start()
     {
         _anim = GetComponent<Animator>();
+        _audioSource = GetComponent<AudioSource>();
         if (_anim == null)
         {
             Debug.LogError(" Animator is NULL");
@@ -30,8 +31,6 @@ public class Enemy : MonoBehaviour
         // move down 4 meters per second
         transform.Translate(Vector3.down * _speed * Time.deltaTime);
 
-        // if bottom of the screen 
-        // respawn at top with random x position
 
         if (transform.position.y < -5.0f)
         {
@@ -52,6 +51,7 @@ public class Enemy : MonoBehaviour
         {           
             player.Damage();
             _anim.SetTrigger("OnEnemyDeath");
+            _audioSource.Play();
             Destroy(this.gameObject,2.8f);
         }
         
@@ -62,6 +62,7 @@ public class Enemy : MonoBehaviour
             player.AddScore(_enemyScore);
             _anim.SetTrigger("OnEnemyDeath");
             _speed = 0f;
+            _audioSource.Play();
             Destroy(this.gameObject,2.8f);
         }
 

@@ -100,6 +100,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _speed: 3
+  _clip: {fileID: 8300000, guid: 530eb7b6da88df349bb46f02ab42ffc2, type: 3}
+  _powerupID: 0
 --- !u!50 &8116117166904271033
 Rigidbody2D:
   serializedVersion: 4
