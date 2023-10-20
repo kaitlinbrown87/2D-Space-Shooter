@@ -6,6 +6,8 @@ public class Enemy : MonoBehaviour
 {
     [SerializeField]
     private float _speed = 4.0f;
+    [SerializeField]
+    private GameObject _laserPrefab;
 
     [SerializeField]
     private int _enemyScore = 10;
@@ -14,6 +16,11 @@ public class Enemy : MonoBehaviour
 
     private Animator _anim;
     private AudioSource _audioSource;
+    private float _fireRate = 3.0f;
+    private float _canFire = -1;
+    [SerializeField]
+    private Transform _laserSpawnPOS;
+
     // Update is called once per frame
     void Start()
     {
@@ -28,18 +35,41 @@ public class Enemy : MonoBehaviour
 
       void Update()
     {
-        // move down 4 meters per second
-        transform.Translate(Vector3.down * _speed * Time.deltaTime);
+        CalculateMovement();
 
+        if (Time.time > _canFire)
+            FireEnemyLaser();
+    }
+    
+    private void FireEnemyLaser()
+    {
+        _fireRate = Random.Range(3.0f, 7.0f);
+        _canFire = Time.time + _fireRate;
+
+        Instantiate(_laserPrefab, _laserSpawnPOS.position, Quaternion.identity, transform);
+        Laser[] lasers = GetComponentsInChildren<Laser>();
+        for (int i = 0; i < lasers.Length; i++)
+        {
+            lasers[i].AssignEnemyLaser();
+        }
+    }
+
+    void CalculateMovement ()
+    {
+        transform.Translate(Vector3.down * (_speed * Time.deltaTime));
 
         if (transform.position.y < -5.0f)
         {
             float randomX = Random.Range(-8f, 8f);
-          transform.position = new Vector3(randomX, 7, 0);
+            transform.position = new Vector3(randomX, 7, 0);
         }
+        
     }
     private void OnTriggerEnter2D (Collider2D other)
     {
+        // move down 4 meters per second
+        //transform.Translate(Vector3.down * _speed * Time.deltaTime);
+        
         Player player = GameObject.Find("Player").GetComponent<Player>();
         if (player == null)
         {
@@ -56,14 +86,27 @@ public class Enemy : MonoBehaviour
         }
         
         if (other.tag == "Laser")
-        {            
+        {
+            Laser laserScript = other.gameObject.GetComponent<Laser>();
+            if (!laserScript)
+            {
+                Debug.LogError("Did NOT find laser script on object");
+                return;
+            }
+
+            bool isFriendly = laserScript.GetIsEnemyLaser();
+            
+            if (isFriendly)
+                return;
+
             Destroy(other.gameObject);
 
             player.AddScore(_enemyScore);
             _anim.SetTrigger("OnEnemyDeath");
             _speed = 0f;
             _audioSource.Play();
-            Destroy(this.gameObject,2.8f);
+            Destroy(GetComponent<Collider2D>());
+            Destroy(this.gameObject, 2.8f);        
         }
 
     }

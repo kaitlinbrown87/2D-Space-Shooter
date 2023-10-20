@@ -147,7 +147,7 @@ public class Player : MonoBehaviour
 
         if (_lives < 1)
         {
-            _spawnManager._OnPlayerDeath();
+            _spawnManager.OnPlayerDeath();
             Destroy(this.gameObject);
         }
 
@@ -169,18 +169,21 @@ public class Player : MonoBehaviour
         _speed *= _speedMultiplier;
         StartCoroutine(SpeedBoostPowerDownRoutine());
     }
+
     IEnumerator SpeedBoostPowerDownRoutine()
     {
         yield return new WaitForSeconds(5.0f);
         _isSpeedBoostActive = false;
         _speed /= _speedMultiplier;
     }
+
     public void ShieldActive()
     {
         _isShieldActive = true;
         _shieldVisualizer.gameObject.SetActive(true);
         Debug.Log("activating shields");
     }
+
     public void AddScore(int amount)
     {
         _score += amount;

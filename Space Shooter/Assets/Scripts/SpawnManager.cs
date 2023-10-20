@@ -14,7 +14,8 @@ public class SpawnManager : MonoBehaviour
     
     // Start is called before the first frame update
     void Start()
-    {;
+    {
+
     }
 
     // Update is called once per frame
@@ -52,7 +53,7 @@ public class SpawnManager : MonoBehaviour
             yield return new WaitForSeconds(Random.Range(3, 8));
         }
     }
-    public void _OnPlayerDeath()
+    public void OnPlayerDeath()
     {
         _stopSpawning = true;
     }
