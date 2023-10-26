@@ -1163,6 +1163,8 @@ MonoBehaviour:
   _score: 0
   _laserSoundClip: {fileID: 8300000, guid: 9b1df2c0cc3c8f046af3a8ff533913c9, type: 3}
   _thrusterSpeed: 4
+  _shieldHealth: 3
+  _shieldColor: {fileID: 1692313749}
 --- !u!212 &1307607322
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1492,6 +1494,11 @@ GameObject:
 --- !u!4 &1692313747 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3779969664644959717, guid: d37667222c2f81a4e8477491b7854a02, type: 3}
+  m_PrefabInstance: {fileID: 3779969666310792566}
+  m_PrefabAsset: {fileID: 0}
+--- !u!212 &1692313749 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 3779969664644959714, guid: d37667222c2f81a4e8477491b7854a02, type: 3}
   m_PrefabInstance: {fileID: 3779969666310792566}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1759028976

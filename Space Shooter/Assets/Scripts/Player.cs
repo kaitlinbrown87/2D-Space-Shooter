@@ -41,10 +41,19 @@ public class Player : MonoBehaviour
     private AudioSource _audioSource;
     [SerializeField]
     private float _thrusterSpeed = 4.0f;
+    [SerializeField]
+    private float _shieldHealth = 3f;
+    [SerializeField]
+    private SpriteRenderer _shieldColor;
 
     // variable to store audio clip
     void Start()
     {
+
+      
+        
+        
+        
         // take current position = new position (0,0,0)
         transform.position = new Vector3(0, 0, 0);
         _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
@@ -130,31 +139,51 @@ public class Player : MonoBehaviour
     }
     public void Damage()
     {
-       if (_lives == 2)
+        if (_isShieldActive)
         {
-            _rightEngine.SetActive(true);
+            _shieldHealth--;
+            if (_shieldHealth == 2)
+            {
+                _shieldColor.color = Color.yellow;
+                return;
+            }
+            else if (_shieldHealth == 1)
+            {
+                _shieldColor.color = Color.red;
+                return;
+            }
+            else if (_shieldHealth <= 0)
+            {
+                _shieldVisualizer.SetActive(false);
+                _isShieldActive = false;
+                return;
+            }
         }
-        else if (_lives == 1)
+        else
         {
-            _leftEngine.SetActive(true);
-        }
-       
-        if (_isShieldActive == true)
-        {
-            _isShieldActive = false;
-            _shieldVisualizer.gameObject.SetActive(false);
-            return;
+            if (_lives == 2)
+            {
+                _rightEngine.SetActive(true);
+            }
+            else if (_lives == 1)
+            {
+                _leftEngine.SetActive(true);
+            }
 
+
+
+
+            _lives -= 1;
+            _uIManager.Updatelives(_lives);
+
+            if (_lives < 1)
+            {
+                _spawnManager.OnPlayerDeath();
+                Destroy(this.gameObject);
+            }
         }
 
-        _lives -= 1;
-        _uIManager.Updatelives(_lives);
-
-        if (_lives < 1)
-        {
-            _spawnManager.OnPlayerDeath();
-            Destroy(this.gameObject);
-        }
+        
 
     }
     public void trippleShotActive()
