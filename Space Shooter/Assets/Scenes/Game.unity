@@ -1162,6 +1162,7 @@ MonoBehaviour:
   _leftEngine: {fileID: 2037491783}
   _score: 0
   _laserSoundClip: {fileID: 8300000, guid: 9b1df2c0cc3c8f046af3a8ff533913c9, type: 3}
+  _thrusterSpeed: 4
 --- !u!212 &1307607322
 SpriteRenderer:
   m_ObjectHideFlags: 0

@@ -39,6 +39,8 @@ public class Player : MonoBehaviour
    private AudioClip _laserSoundClip;
    
     private AudioSource _audioSource;
+    [SerializeField]
+    private float _thrusterSpeed = 4.0f;
 
     // variable to store audio clip
     void Start()
@@ -75,6 +77,7 @@ public class Player : MonoBehaviour
         {
             FireLaser();
         }
+
     }
 
     void CalculateMovement()
@@ -84,8 +87,11 @@ public class Player : MonoBehaviour
 
 
         Vector3 direction = new Vector3(horizontalinput, verticalinput, 0);
-        transform.Translate(direction * _speed * Time.deltaTime);
-
+        transform.Translate(direction * _speed * Time.deltaTime); 
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
+            transform.Translate(direction * _speed * _thrusterSpeed * Time.deltaTime);
+        }
 
         if (transform.position.y >= 0)
         {
@@ -119,9 +125,8 @@ public class Player : MonoBehaviour
             GameObject newLaser = Instantiate(_LaserPrefab, transform.position + new Vector3(0, 1.05f, 0), Quaternion.identity);
         }
         _audioSource.Play();
-        
-        //play the laser audio clip
 
+        //play the laser audio clip
     }
     public void Damage()
     {
