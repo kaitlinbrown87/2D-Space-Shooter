@@ -19,10 +19,15 @@ public class UIManager : MonoBehaviour
     private TextMeshProUGUI _restartText;
     [SerializeField]
     private GameManager _gameManager;
+    [SerializeField]
+    private TextMeshProUGUI _ammoText;
+    [SerializeField]
+    private bool _noAmmo = false;
     // Start is called before the first frame update
     void Start()
     {
         _scoreText.text = "Score:" + 0;
+        _ammoText.text = "Ammo:";
         _gameOverText.gameObject.SetActive(false);
         _gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
         if (_gameManager == null)
@@ -38,6 +43,16 @@ public class UIManager : MonoBehaviour
         _gameOverText.gameObject.SetActive(false);
        
       
+    }
+    public void ChangeAmmoCount(int _ammoCount)
+    {
+        _ammoText.text = "Ammo:" + _ammoCount;
+        if (_ammoCount == 0)
+        {
+            _noAmmo = true;
+            StartCoroutine(NoAmmoFlickerRoutine());
+        }
+       
     }
     public void Updatelives (int currentLives)
     {
@@ -64,5 +79,15 @@ public class UIManager : MonoBehaviour
             yield return new WaitForSeconds(0.5f);
         }
        
+    }
+    IEnumerator NoAmmoFlickerRoutine()
+    {
+        while (_noAmmo == true)
+        {
+            yield return new WaitForSeconds(0.5f);
+            _ammoText.enabled = false;
+            yield return new WaitForSeconds(0.5f);
+            _ammoText.enabled = true;
+        }
     }
 }

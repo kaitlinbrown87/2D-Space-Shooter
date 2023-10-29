@@ -45,6 +45,8 @@ public class Player : MonoBehaviour
     private float _shieldHealth = 3f;
     [SerializeField]
     private SpriteRenderer _shieldColor;
+    [SerializeField]
+    private int _ammoCount = 15;
 
     // variable to store audio clip
     void Start()
@@ -123,7 +125,11 @@ public class Player : MonoBehaviour
 
     void FireLaser()
     {
-
+        if (_ammoCount <= 0) return;
+        {
+            _ammoCount -= 1;
+            _uIManager.ChangeAmmoCount(_ammoCount); 
+        }
         _canFire = Time.time + _fireRate;
         if (_isTripleShotActive == true)
         {
