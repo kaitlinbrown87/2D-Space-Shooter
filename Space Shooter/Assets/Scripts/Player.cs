@@ -47,6 +47,8 @@ public class Player : MonoBehaviour
     private SpriteRenderer _shieldColor;
     [SerializeField]
     private int _ammoCount = 15;
+    [SerializeField]
+    private int _ammo = 15;
 
     // variable to store audio clip
     void Start()
@@ -223,7 +225,11 @@ public class Player : MonoBehaviour
         _shieldVisualizer.gameObject.SetActive(true);
         Debug.Log("activating shields");
     }
-
+    public void AddAmmo()
+    {
+        _ammo += 15;
+        _uIManager.ChangeAmmoCount(_ammo);
+    }
     public void AddScore(int amount)
     {
         _score += amount;
