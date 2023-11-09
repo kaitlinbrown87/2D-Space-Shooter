@@ -56,6 +56,9 @@ public class Powerup : MonoBehaviour
                     default:
                         Debug.Log("Default Value");
                         break;
+                    case 4:
+                        player.RestoreLives();
+                        break;
 
                 }
             }

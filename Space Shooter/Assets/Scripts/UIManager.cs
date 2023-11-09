@@ -90,4 +90,5 @@ public class UIManager : MonoBehaviour
             _ammoText.enabled = true;
         }
     }
+
 }

@@ -194,6 +194,22 @@ public class Player : MonoBehaviour
         
 
     }
+   public void RestoreLives()
+    {
+        if (_lives < 3)
+        {
+            _lives++;
+            if (_lives == 3)
+            {
+                _leftEngine.SetActive(false);
+            }
+            else if (_lives == 2)
+            {
+                _rightEngine.SetActive(false);
+            } 
+            _uIManager.Updatelives(_lives);
+        }
+    }
     public void trippleShotActive()
     {
         _isTripleShotActive = true;
