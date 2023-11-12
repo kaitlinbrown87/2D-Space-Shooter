@@ -52,6 +52,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _speed: 4
   _laserPrefab: {fileID: 251077539833612018, guid: cc7422a8dc1bd2e41b12101debd6d92a, type: 3}
+  _explosionPrefab: {fileID: 2983233890655759438, guid: 4cc8ec03f54651d4f965ff3eabda09e8, type: 3}
   _enemyScore: 10
   _laserSpawnPOS: {fileID: 8192517396997950467}
 --- !u!212 &1565228198177564933

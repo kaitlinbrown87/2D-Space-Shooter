@@ -8,18 +8,19 @@ public class Enemy : MonoBehaviour
     private float _speed = 4.0f;
     [SerializeField]
     private GameObject _laserPrefab;
-
+    [SerializeField]
+    private GameObject _explosionPrefab;
     [SerializeField]
     private int _enemyScore = 10;
-
     private Player _player;
-
     private Animator _anim;
     private AudioSource _audioSource;
     private float _fireRate = 3.0f;
     private float _canFire = -1;
     [SerializeField]
     private Transform _laserSpawnPOS;
+    [SerializeField]
+    private int _enemySpeed;
 
     // Update is called once per frame
     void Start()
@@ -52,6 +53,14 @@ public class Enemy : MonoBehaviour
         {
             lasers[i].AssignEnemyLaser();
         }
+    }
+    public void PowerBomb()
+    {
+        Instantiate(_explosionPrefab, transform.position, Quaternion.identity);
+        _enemySpeed = 0;
+        _audioSource.Play();
+        Destroy(GetComponent<Collider2D>());
+        Destroy(gameObject);
     }
 
     void CalculateMovement ()

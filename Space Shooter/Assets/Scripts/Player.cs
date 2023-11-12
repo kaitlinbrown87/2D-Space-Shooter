@@ -37,8 +37,7 @@ public class Player : MonoBehaviour
     private UIManager _uIManager;
    [SerializeField]
    private AudioClip _laserSoundClip;
-   
-    private AudioSource _audioSource;
+   private AudioSource _audioSource;
     [SerializeField]
     private float _thrusterSpeed = 4.0f;
     [SerializeField]
@@ -49,6 +48,14 @@ public class Player : MonoBehaviour
     private int _ammoCount = 15;
     [SerializeField]
     private int _ammo = 15;
+    [SerializeField]
+    private int _PowerBombShot;
+    private bool _isPowerBombActive;
+    [SerializeField]
+    private AudioSource _powerUpSoundClip;
+    [SerializeField]
+    private GameObject[] _enemiesArray;
+
 
     // variable to store audio clip
     void Start()
@@ -142,7 +149,11 @@ public class Player : MonoBehaviour
             GameObject newLaser = Instantiate(_LaserPrefab, transform.position + new Vector3(0, 1.05f, 0), Quaternion.identity);
         }
         _audioSource.Play();
-
+        if (_isPowerBombActive && _PowerBombShot >0)
+        {
+            PowerBombEngage();
+            _PowerBombShot--;
+        }
         //play the laser audio clip
     }
     public void Damage()
@@ -241,6 +252,18 @@ public class Player : MonoBehaviour
         _shieldVisualizer.gameObject.SetActive(true);
         Debug.Log("activating shields");
     }
+    public void PowerBomb()
+    {
+        _isPowerBombActive = true;
+        _PowerBombShot = 1;
+        _audioSource.Play();
+        //StartCoroutine(PowerBombPowerDownRoutine());
+    }
+    IEnumerator PowerBombPowerDownRoutine()
+    {
+        yield return new WaitForSeconds(5.0f);
+        _isPowerBombActive = false;
+    }
     public void AddAmmo()
     {
         _ammo += 15;
@@ -250,6 +273,15 @@ public class Player : MonoBehaviour
     {
         _score += amount;
         _uIManager.UpdateScore(_score);
+    }
+    public void PowerBombEngage()
+    {
+        _enemiesArray = GameObject.FindGameObjectsWithTag("Enemy");
+        foreach(GameObject enemy in _enemiesArray)
+        {
+            enemy.GetComponent<Enemy>().PowerBomb();
+        }
+
     }
     
 

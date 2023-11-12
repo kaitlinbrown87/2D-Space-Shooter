@@ -7,11 +7,12 @@ TagManager:
   - Enemy
   - Laser
   - Shield
+  - Super Laser
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - foreground
   - Water
   - UI
   - Post Processing Layer
