@@ -10,7 +10,7 @@ public class SpawnManager : MonoBehaviour
     private GameObject _enemyContainer;
     private bool _stopSpawning = false;
     [SerializeField]
-    private GameObject [] powerups;
+    private GameObject[] powerups;
     
     
     // Start is called before the first frame update

@@ -23,6 +23,15 @@ public class UIManager : MonoBehaviour
     private TextMeshProUGUI _ammoText;
     [SerializeField]
     private bool _noAmmo = false;
+    // Variable for the slider and % value
+    [SerializeField]
+    private Slider _thrusterSlider;
+    [SerializeField]
+    private TextMeshProUGUI _fuelPercentageText;
+
+
+
+
     // Start is called before the first frame update
     void Start()
     {

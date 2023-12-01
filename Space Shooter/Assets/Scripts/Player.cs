@@ -35,9 +35,10 @@ public class Player : MonoBehaviour
     [SerializeField]
     private int _score;
     private UIManager _uIManager;
-   [SerializeField]
-   private AudioClip _laserSoundClip;
-   private AudioSource _audioSource;
+    [SerializeField]
+    private AudioClip _laserSoundClip;
+
+    private AudioSource _audioSource;
     [SerializeField]
     private float _thrusterSpeed = 4.0f;
     [SerializeField]
@@ -45,26 +46,20 @@ public class Player : MonoBehaviour
     [SerializeField]
     private SpriteRenderer _shieldColor;
     [SerializeField]
-    private int _ammoCount = 15;
+    private int _ammoCount = 15; 
     [SerializeField]
-    private int _ammo = 15;
+    private int _powerBombShot;
+    private bool _isPowerBombActive = false;
     [SerializeField]
-    private int _PowerBombShot;
-    private bool _isPowerBombActive;
-    [SerializeField]
-    private AudioSource _powerUpSoundClip;
+    private AudioClip _powerUpSoundClip;
     [SerializeField]
     private GameObject[] _enemiesArray;
-
+   
+    
 
     // variable to store audio clip
     void Start()
     {
-
-      
-        
-        
-        
         // take current position = new position (0,0,0)
         transform.position = new Vector3(0, 0, 0);
         _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
@@ -75,16 +70,16 @@ public class Player : MonoBehaviour
             Debug.LogError("Spawn manager is NULL.");
         }
 
-        if (_uIManager == null )
+        if (_uIManager == null)
         {
             Debug.LogError("UI manager is null");
         }
-        
-        if (_audioSource== null)
+
+        if (_audioSource == null)
         {
             Debug.LogError("audio source from player is NULL");
         }
-        else 
+        else
         {
             _audioSource.clip = _laserSoundClip;
         }
@@ -107,7 +102,7 @@ public class Player : MonoBehaviour
 
 
         Vector3 direction = new Vector3(horizontalinput, verticalinput, 0);
-        transform.Translate(direction * _speed * Time.deltaTime); 
+        transform.Translate(direction * _speed * Time.deltaTime);
         if (Input.GetKey(KeyCode.LeftShift))
         {
             transform.Translate(direction * _speed * _thrusterSpeed * Time.deltaTime);
@@ -137,9 +132,12 @@ public class Player : MonoBehaviour
         if (_ammoCount <= 0) return;
         {
             _ammoCount -= 1;
-            _uIManager.ChangeAmmoCount(_ammoCount); 
-        }
+            _uIManager.ChangeAmmoCount(_ammoCount);
+        } 
         _canFire = Time.time + _fireRate;
+        _ammoCount--;
+
+
         if (_isTripleShotActive == true)
         {
             Instantiate(_tripleShotPrefab, transform.position, Quaternion.identity);
@@ -149,11 +147,12 @@ public class Player : MonoBehaviour
             GameObject newLaser = Instantiate(_LaserPrefab, transform.position + new Vector3(0, 1.05f, 0), Quaternion.identity);
         }
         _audioSource.Play();
-        if (_isPowerBombActive && _PowerBombShot >0)
+        if (_isPowerBombActive && _powerBombShot >0)
         {
             PowerBombEngage();
-            _PowerBombShot--;
+            _powerBombShot--;
         }
+
         //play the laser audio clip
     }
     public void Damage()
@@ -202,24 +201,8 @@ public class Player : MonoBehaviour
             }
         }
 
-        
 
-    }
-   public void RestoreLives()
-    {
-        if (_lives < 3)
-        {
-            _lives++;
-            if (_lives == 3)
-            {
-                _leftEngine.SetActive(false);
-            }
-            else if (_lives == 2)
-            {
-                _rightEngine.SetActive(false);
-            } 
-            _uIManager.Updatelives(_lives);
-        }
+
     }
     public void trippleShotActive()
     {
@@ -252,27 +235,45 @@ public class Player : MonoBehaviour
         _shieldVisualizer.gameObject.SetActive(true);
         Debug.Log("activating shields");
     }
-    public void PowerBomb()
-    {
-        _isPowerBombActive = true;
-        _PowerBombShot = 1;
-        _audioSource.Play();
-        //StartCoroutine(PowerBombPowerDownRoutine());
-    }
-    IEnumerator PowerBombPowerDownRoutine()
-    {
-        yield return new WaitForSeconds(5.0f);
-        _isPowerBombActive = false;
-    }
-    public void AddAmmo()
-    {
-        _ammo += 15;
-        _uIManager.ChangeAmmoCount(_ammo);
-    }
+      
     public void AddScore(int amount)
     {
         _score += amount;
         _uIManager.UpdateScore(_score);
+
+    }
+    public void AddAmmo ()
+    {
+        _ammoCount += 15;
+        _uIManager.ChangeAmmoCount(_ammoCount);
+    }
+    public void RestoreLives ()
+    {
+        if (_lives < 3)
+        {
+            _lives++;
+            if (_lives == 3)
+            {
+                _leftEngine.SetActive(false);
+            }
+            else if (_lives == 2)
+            {
+                _rightEngine.SetActive(false);
+            }
+            _uIManager.Updatelives(_lives);
+        }
+    }
+    public void PowerBomb ()
+    {
+        _isPowerBombActive = true;
+        _powerBombShot = 1;
+        _audioSource.PlayOneShot(_powerUpSoundClip);
+        StartCoroutine(PowerBombPowerDownRoutine());
+    }
+    IEnumerator PowerBombPowerDownRoutine ()
+    {
+        yield return new WaitForSeconds(5.0f);
+        _isPowerBombActive = true;
     }
     public void PowerBombEngage()
     {
@@ -281,13 +282,8 @@ public class Player : MonoBehaviour
         {
             enemy.GetComponent<Enemy>().PowerBomb();
         }
-
     }
-    
-
-    // Method to add 10 to the score
-    // communicate with the UI to update score
 }
-
+        
 
     

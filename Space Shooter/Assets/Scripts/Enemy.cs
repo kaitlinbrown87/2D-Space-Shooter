@@ -79,7 +79,7 @@ public class Enemy : MonoBehaviour
         // move down 4 meters per second
         //transform.Translate(Vector3.down * _speed * Time.deltaTime);
         
-        Player player = GameObject.Find("Player").GetComponent<Player>();
+        Player player = GameObject.Find("Player").GetComponent<Player>(); 
         if (player == null)
         {
             Debug.LogError("player script not found");
@@ -117,7 +117,7 @@ public class Enemy : MonoBehaviour
             Destroy(GetComponent<Collider2D>());
             Destroy(this.gameObject, 2.8f);        
         }
-
     }
+   
 }
 
