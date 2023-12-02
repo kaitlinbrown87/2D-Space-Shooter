@@ -54,6 +54,18 @@ public class Player : MonoBehaviour
     private AudioClip _powerUpSoundClip;
     [SerializeField]
     private GameObject[] _enemiesArray;
+    [SerializeField]
+    private float _powerUpThrustersWaitTimeLimit = 3.0f;
+    [SerializeField]
+    private float _thrusterChargeLevelMax = 10.0f;
+    [SerializeField]
+    private float _thrusterChargeLevel;
+    [SerializeField]
+    private float _changeDecreaseThrusterChargeBy = 1.5f;
+    [SerializeField]
+    private float _changeIncreaseThrusterChargeBy = 0.01f;
+    private bool _canUseThruster = true;
+    private bool _thrusterInUse = false;
    
     
 
@@ -92,7 +104,39 @@ public class Player : MonoBehaviour
         {
             FireLaser();
         }
-
+        void ThrusterChargeLevel ()
+        {
+            _thrusterChargeLevel = Mathf.Clamp(_thrusterChargeLevel, 0, _thrusterChargeLevelMax);
+            if (_thrusterChargeLevel <=0.0f)
+            {
+                _canUseThruster = false;
+            }
+            else if (_thrusterChargeLevel >= (_thrusterChargeLevelMax/0.75f))
+            {
+                _canUseThruster = true;
+            }
+        }
+        void ThrusterAcceleration()
+        {
+            if (Input.GetKeyDown(KeyCode.LeftShift)&& _canUseThruster)
+            {
+                _speed *= _speedMultiplier;
+                _thrusterInUse = true;
+            }
+            else if (Input.GetKeyUp(KeyCode.LeftShift))
+            {
+                _speed = 3.5f;
+                _thrusterInUse = false;
+            }
+            if (_thrusterInUse)
+            {
+                ThrusterActive();
+            }
+            else if (!_thrusterInUse)
+            {
+                StartCoroutine(ThrusterRepinishRoutine());
+            }
+        }
     }
 
     void CalculateMovement()
@@ -281,6 +325,36 @@ public class Player : MonoBehaviour
         foreach(GameObject enemy in _enemiesArray)
         {
             enemy.GetComponent<Enemy>().PowerBomb();
+        }
+    }
+    public void ThrusterActive()
+    {
+        if (_canUseThruster == true)
+        {
+            _thrusterChargeLevel -= Time.deltaTime * _changeDecreaseThrusterChargeBy;
+            _uIManager.UpdateThrusterSlider(_thrusterChargeLevel);
+        }
+        if (_thrusterChargeLevel <= 0)
+        {
+            _uIManager.ThrusterSliderUsableCoolor(false);
+            _thrusterInUse = false;
+            _canUseThruster = false;
+            _speed = 0.0f;
+        }
+    }
+    IEnumerator ThrusterRepinishRoutine ()
+    {
+        yield return new WaitForSeconds(_powerUpThrustersWaitTimeLimit);
+        while (_thrusterChargeLevel <= _thrusterChargeLevel && !_thrusterInUse) ;
+        {
+            yield return null;
+            _thrusterChargeLevel += Time.deltaTime * _changeIncreaseThrusterChargeBy;
+            _uIManager.UpdateThrusterSlider(_thrusterChargeLevel);
+        }
+        if (_thrusterChargeLevel >= _thrusterChargeLevelMax)
+        {
+            _uIManager.ThrusterSliderUsableCoolor(true);
+            _canUseThruster = true;
         }
     }
 }

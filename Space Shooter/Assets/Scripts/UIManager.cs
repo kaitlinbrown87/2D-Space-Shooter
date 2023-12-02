@@ -23,11 +23,13 @@ public class UIManager : MonoBehaviour
     private TextMeshProUGUI _ammoText;
     [SerializeField]
     private bool _noAmmo = false;
-    // Variable for the slider and % value
+    // Variable for the slider
     [SerializeField]
     private Slider _thrusterSlider;
     [SerializeField]
-    private TextMeshProUGUI _fuelPercentageText;
+    private Image _thrusterSliderFill;
+
+    
 
 
 
@@ -99,5 +101,22 @@ public class UIManager : MonoBehaviour
             _ammoText.enabled = true;
         }
     }
-
+    public void UpdateThrusterSlider (float _thrustValue)
+    {
+        if (_thrustValue >= 0 && _thrustValue <=10)
+        {
+            _thrusterSlider.value = _thrustValue;
+        }
+    }
+    public void ThrusterSliderUsableCoolor (bool _usableThrusters)
+    {
+        if (_usableThrusters)
+        {
+            _thrusterSliderFill.color = Color.green;
+        }
+        else if (_usableThrusters)
+        {
+            _thrusterSliderFill.color = Color.blue;
+        }
+    }
 }
