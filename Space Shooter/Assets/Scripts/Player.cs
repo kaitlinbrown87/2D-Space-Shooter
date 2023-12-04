@@ -66,6 +66,12 @@ public class Player : MonoBehaviour
     private float _changeIncreaseThrusterChargeBy = 0.01f;
     private bool _canUseThruster = true;
     private bool _thrusterInUse = false;
+    [SerializeField]
+    public float _shakeDuration = 0.4f;
+    [SerializeField]
+    public float _shakeMagnitude = 0.5f;
+    [SerializeField]
+    CameraShake _cameraShake;
    
     
 
@@ -94,6 +100,11 @@ public class Player : MonoBehaviour
         else
         {
             _audioSource.clip = _laserSoundClip;
+        }
+        _cameraShake = GameObject.Find("CameraShake").GetComponent<CameraShake>();
+        if (_cameraShake == null)
+        {
+            Debug.LogError("CameraShake is NULL");
         }
     }
 
@@ -201,6 +212,7 @@ public class Player : MonoBehaviour
     }
     public void Damage()
     {
+       
         if (_isShieldActive)
         {
             _shieldHealth--;
@@ -236,6 +248,7 @@ public class Player : MonoBehaviour
 
 
             _lives -= 1;
+            StartCoroutine(_cameraShake.Shake(_shakeDuration, _shakeMagnitude));
             _uIManager.Updatelives(_lives);
 
             if (_lives < 1)

@@ -229,6 +229,37 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &189646318
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 189646319}
+  m_Layer: 0
+  m_Name: CameraShake
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &189646319
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 189646318}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -11.817707, y: -19.500772, z: 2.4987001}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1919150404}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!224 &285527463 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8812016192580304054, guid: cb35dc53221128f4c8d6c9b57f239f9a, type: 3}
@@ -1460,6 +1491,14 @@ MonoBehaviour:
   _powerBombShot: 0
   _powerUpSoundClip: {fileID: 0}
   _enemiesArray: []
+  _powerUpThrustersWaitTimeLimit: 3
+  _thrusterChargeLevelMax: 10
+  _thrusterChargeLevel: 0
+  _changeDecreaseThrusterChargeBy: 1.5
+  _changeIncreaseThrusterChargeBy: 0.01
+  _shakeDuration: 0.4
+  _shakeMagnitude: 0.5
+  _cameraShake: {fileID: 1919150406}
 --- !u!212 &1307607322
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -2199,6 +2238,7 @@ GameObject:
   - component: {fileID: 1919150403}
   - component: {fileID: 1919150402}
   - component: {fileID: 1919150405}
+  - component: {fileID: 1919150406}
   m_Layer: 6
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -2268,7 +2308,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 189646319}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2332,6 +2373,18 @@ MonoBehaviour:
   m_BeforeTransparentBundles: []
   m_BeforeStackBundles: []
   m_AfterStackBundles: []
+--- !u!114 &1919150406
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1919150401}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6241ac6c14fb5c468949130a7f1b18c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1980176801 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6724313232328441713, guid: c8a033bd3dd917a4c90588e95d1f1456, type: 3}
