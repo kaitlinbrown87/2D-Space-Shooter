@@ -6,6 +6,7 @@ public class Enemy : MonoBehaviour
 {
     [SerializeField]
     private float _speed = 4.0f;
+    private float _startingXPos;
     [SerializeField]
     private GameObject _laserPrefab;
     [SerializeField]
@@ -25,6 +26,7 @@ public class Enemy : MonoBehaviour
     // Update is called once per frame
     void Start()
     {
+        _startingXPos = transform.position.x;
         _anim = GetComponent<Animator>();
         _audioSource = GetComponent<AudioSource>();
         if (_anim == null)
@@ -37,11 +39,24 @@ public class Enemy : MonoBehaviour
       void Update()
     {
         CalculateMovement();
-
+        RandomMovement();
         if (Time.time > _canFire)
             FireEnemyLaser();
     }
-    
+    void RandomMovement()
+    {
+        if (transform.position.y < 4)
+        {
+            if (_startingXPos>0.1f)
+            {
+                transform.Translate(Vector3.left * _speed * Time.deltaTime);
+            }
+            else if (_startingXPos <= 0.2f)
+            {
+                transform.Translate(Vector3.right * _speed * Time.deltaTime);
+            }
+        }
+    }
     private void FireEnemyLaser()
     {
         _fireRate = Random.Range(3.0f, 7.0f);
