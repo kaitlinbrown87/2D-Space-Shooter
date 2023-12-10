@@ -62,6 +62,9 @@ public class Powerup : MonoBehaviour
                     case 5:
                         player.PowerBomb();
                         break;
+                    case 6:
+                        player.SlowDownPowerUpActive();
+                        break;
 
                 }
             }

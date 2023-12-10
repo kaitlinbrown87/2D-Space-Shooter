@@ -72,7 +72,7 @@ public class Player : MonoBehaviour
     public float _shakeMagnitude = 0.5f;
     [SerializeField]
     CameraShake _cameraShake;
-   
+    private bool _isSlowDownActive = false;
     
 
     // variable to store audio clip
@@ -180,6 +180,11 @@ public class Player : MonoBehaviour
         {
             transform.position = new Vector3(RightLimit, transform.position.y, 0f);
         }
+        if (_isSlowDownActive)
+        {
+            _speed = 5.0f;
+            _speed = _speed / 2;
+        }
     }
 
     void FireLaser()
@@ -243,10 +248,6 @@ public class Player : MonoBehaviour
             {
                 _leftEngine.SetActive(true);
             }
-
-
-
-
             _lives -= 1;
             StartCoroutine(_cameraShake.Shake(_shakeDuration, _shakeMagnitude));
             _uIManager.Updatelives(_lives);
@@ -257,9 +258,6 @@ public class Player : MonoBehaviour
                 Destroy(this.gameObject);
             }
         }
-
-
-
     }
     public void trippleShotActive()
     {
@@ -369,6 +367,16 @@ public class Player : MonoBehaviour
             _uIManager.ThrusterSliderUsableCoolor(true);
             _canUseThruster = true;
         }
+    }
+     void SlowDownPowerUpActive()
+    {
+        _isSlowDownActive = true;
+        StartCoroutine(SlowDownTurnOffRoutine());
+    }
+    IEnumerator SlowDownTurnOffRoutine()
+    {
+        yield return new WaitForSeconds(5.0f);
+        _isSlowDownActive = false;
     }
 }
         

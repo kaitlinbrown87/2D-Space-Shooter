@@ -28,11 +28,8 @@ public class UIManager : MonoBehaviour
     private Slider _thrusterSlider;
     [SerializeField]
     private Image _thrusterSliderFill;
-
-    
-
-
-
+    [SerializeField]
+    private TextMeshProUGUI _waveDisplay;
 
     // Start is called before the first frame update
     void Start()
@@ -117,6 +114,20 @@ public class UIManager : MonoBehaviour
         else if (_usableThrusters)
         {
             _thrusterSliderFill.color = Color.blue;
+        }
+    }
+    public void DisplayWaveNumber (int waveNumber)
+    {
+        _waveDisplay.text = "Wave:" + waveNumber;
+        _waveDisplay.gameObject.SetActive(true);
+        StartCoroutine(WaveDisplayroutine());
+    }
+    IEnumerator WaveDisplayroutine()
+    {
+        while (_waveDisplay == true)
+        {
+            yield return new WaitForSeconds(3.0f);
+            _waveDisplay.gameObject.SetActive(false);
         }
     }
 }

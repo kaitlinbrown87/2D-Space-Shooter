@@ -22,6 +22,7 @@ public class Enemy : MonoBehaviour
     private Transform _laserSpawnPOS;
     [SerializeField]
     private int _enemySpeed;
+    private SpawnManager _SpawnManager;
 
     // Update is called once per frame
     void Start()
@@ -106,6 +107,7 @@ public class Enemy : MonoBehaviour
             player.Damage();
             _anim.SetTrigger("OnEnemyDeath");
             _audioSource.Play();
+            _SpawnManager.EnemyDead();
             Destroy(this.gameObject,2.8f);
         }
         
